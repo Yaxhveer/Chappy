@@ -99,7 +99,7 @@ export default function ChatLayout() {
   return (
     <div className="box-border mx-auto">
       <div className="ss:w-auto min-w-full bg-zinc-200 border-x border-b border-zinc-400 dark:bg-zinc-900 dark:border-zinc-700 rounded ss:grid ss:grid-cols-3">
-        <div ref={allUserRef} className="flex bg-zinc-200 border-r border-zinc-400 dark:bg-zinc-900 dark:border-zinc-700 lg:col-span-1 ss:block">
+        <div ref={allUserRef} className="flex flex-col bg-zinc-200 border-r border-zinc-400 dark:bg-zinc-900 dark:border-zinc-700 lg:col-span-1 ss:block">
           <SearchUsers handleSearch={handleSearch} />
 
           <AllUsers
@@ -120,7 +120,6 @@ export default function ChatLayout() {
             socket={socket}
             handleDeleteChat={handleDeleteChat}
             handleReturn={handleReturn}
-            // chatRoomRef={chatRoomRef}
           />
         ) : (
           <Welcome />
