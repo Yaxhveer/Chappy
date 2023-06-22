@@ -4,44 +4,35 @@ export const createChatRoom = async (req, res) => {
 
     const { firstUserID, secondUserID } = req.body;
     console.log(1.1, [firstUserID, secondUserID]);
-    try{
-        const flag = await pool.query(
+
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+
+        const flag = await client.query(
             `select exists (select from chat_room where members = (ARRAY [$1, $2]) or members = (ARRAY [$2, $1]));`,
             [firstUserID, secondUserID]
         );
+
         if (flag.rows[0].exists){
             console.log("ChatRoom already exists.");
+            await client.query('COMMIT');
             res.json({done: false, message: "ChatRoom already exists."})
-            
         } else {
-            const aa = await pool.query(
+            const aa = await client.query(
                 `INSERT into chat_room(members) values (ARRAY [$1, $2]) RETURNING *;`,
-                [firstUserID, secondUserID]);
+                [firstUserID, secondUserID]
+            )
+            await client.query('COMMIT');
             console.log(1.1, aa.rows[0]);
             res.json(aa.rows[0])
         }
     } catch (e) {
-        res.json({ done: false, message: e })
-        console.log(1.1, e);
+        await client.query('ROLLBACK');
+        throw e;
+    } finally {
+        client.release();
     }
-
-    // const client = pool.connect();
-    // try {
-    //     await client.query('BEGIN');
-
-    //     const aa = await client.query(
-    //         `INSERT into chat_room(members) values ('[$1, $2]');`,
-    //         [firstUserID, secondUserID]
-    //     )
-    //     await client.query('COMMIT');
-    //     console.log(aa);
-    //     res.json({done: true});
-    // } catch (e) {
-    //     await client.query('ROLLBACK');
-    //     throw e;
-    // } finally {
-    //     client.release();
-    // }
 }
 
 export const getChatRoom = async (req, res) => {

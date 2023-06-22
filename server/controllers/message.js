@@ -4,35 +4,23 @@ export const createMessage = async (req, res) => {
     const { msg, chatRoomID, userID } = req.body;
     console.log(2.1, [ msg, chatRoomID, userID ]);
 
+    const client = await pool.connect();
     try{
+        await client.query('BEGIN');
 
-        const message = await pool.query(
+        const message = await client.query(
             'INSERT into chat_message(chat_room_id, sender, message_data) values ($1, $2, $3) RETURNING *;',
             [chatRoomID, userID, msg]
-        )
+        );
+        await client.query('COMMIT');
         console.log(2.1, message.rows);
-        res.json(message.rows[0])
+        res.json(message.rows[0]);
     } catch (e) {
-        res.json({ done: false, message: e })
-        console.log(2.1, e);
+        await client.query('ROLLBACK');
+        throw e;
+    } finally {
+        client.release();
     }
-
-    // const client = pool.connect();
-    // try{
-    //     await client.query('BEGIN');
-
-    //     await client.query(
-    //         'INSERT into chat_message(chat_room_id, sender, message_data) values ($1, $2, $3);',
-    //         [chatRoomID, userID, msg]
-    //     )
-    //     await client.query('COMMIT');
-    //     res.json({done: true});
-    // } catch (e) {
-    //     await client.query('ROLLBACK');
-    //     throw e;
-    // } finally {
-    //     client.release();
-    // }
 }
 
 export const getMessages = async (req, res) => {
