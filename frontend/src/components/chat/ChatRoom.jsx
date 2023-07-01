@@ -82,7 +82,7 @@ export default function ChatRoom({ currentChat, currentUser, socket, handleDelet
               </svg>
             </button>
           </div>
-        </div>z
+        </div>
 
         <div className="relative w-full p-6 overflow-y-auto h-[30rem] bg-zinc-200 border-b border-zinc-400 dark:bg-zinc-900 dark:border-zinc-700">
           <ul className="space-y-2">

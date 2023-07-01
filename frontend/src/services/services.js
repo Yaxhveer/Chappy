@@ -87,19 +87,6 @@ export const deleteChatRoom = async (chatRoomID) => {
     }
 }
 
-// export const getChatRoomUsers = async (firstUserID, secondUserID) => {
-//     const header = await getHeaders();
-//     try {
-//         const res = await fetch(`${url}/room/${firstUserID}/${secondUserID}`, {
-//             method: "GET",
-//             headers: header
-//         })
-//         return res.json();
-//     } catch (e) {
-//         console.error(e);
-//     }
-// }
-
 export const createChatRoom = async (firstUserID, secondUserID) => {
     const header = await getHeaders();
     const users = {firstUserID: firstUserID, secondUserID: secondUserID};

@@ -10,6 +10,10 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setError("");
+  }, []);
+
   useEffect(()=>{
     if(currUser){
       navigate('/');
@@ -27,7 +31,7 @@ export default function Login() {
     catch{
       setError('Failed to Login');
     }
-    setLoading('');
+    setLoading(false);
   }
 
 

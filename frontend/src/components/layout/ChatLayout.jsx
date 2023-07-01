@@ -24,7 +24,7 @@ export default function ChatLayout() {
   const chatRoomRef = useRef();
 
 
-  const { currUser } = useAuth();
+  const { currUser, setError } = useAuth();
 
   useEffect(() => {
     const getSocket = async () => {
@@ -51,6 +51,8 @@ export default function ChatLayout() {
   }, [currUser.uid, currentChat]);
 
   useEffect(() => {
+    setError("");
+    
     const fetchData = async () => {
       const res = await getAllUsers();
       console.log("allUsers: ", res);

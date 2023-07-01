@@ -11,6 +11,10 @@ export default function Register() {
   const {currUser, register, setError} = useAuth();
   const navigate = useNavigate();
   
+  useEffect(() => {
+    setError("");
+  }, []);
+
   useEffect(()=>{
     if(currUser){
       navigate('/');
